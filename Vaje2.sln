@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollatzConjecture", "CollatzConjecture\CollatzConjecture.csproj", "{23F73190-202F-4E10-9F4C-53C92214B4A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CollatzConjecture", "CollatzConjecture\CollatzConjecture.csproj", "{23F73190-202F-4E10-9F4C-53C92214B4A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinarySearchTree", "BinarySearchTree\BinarySearchTree.csproj", "{ADB207BC-C732-4517-81DF-497FC73D1428}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{23F73190-202F-4E10-9F4C-53C92214B4A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23F73190-202F-4E10-9F4C-53C92214B4A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23F73190-202F-4E10-9F4C-53C92214B4A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADB207BC-C732-4517-81DF-497FC73D1428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADB207BC-C732-4517-81DF-497FC73D1428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADB207BC-C732-4517-81DF-497FC73D1428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADB207BC-C732-4517-81DF-497FC73D1428}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -7,6 +7,19 @@ namespace CollatzConjecture
         static void Main(string[] args)
         {
             collazConjR(17);
+
+            /* BITWISE OPERATIONS
+            int x = 128;
+            Console.WriteLine("x={0}, x>>1 = x/(2^1) = x/2 {1}", x, x>>1 );
+            Console.WriteLine("x={0}, x>>2 = x/(2^2) = x/4 {1}", x, x >> 2);
+
+            Console.WriteLine("x^1 = abcd efgh AND 0000 0001 = 0000 000h = h = 0/1 => even/odd");
+
+            x = 10;
+
+            Console.WriteLine("x={0}, x<<2 = x*(2^2) = x*4 {1}", x, x << 2);
+            */
+
         }
 
         /// <summary>

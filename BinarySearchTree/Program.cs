@@ -9,15 +9,12 @@ namespace BinarySearchTree
     {
         static void Main(string[] args)
         {
-            //Random rnd = new Random();
-            //BSTree bst = new BSTree(new Node(rnd.Next(0,100)));
-            //bst.Insert(new Node(rnd.Next(0, 100)));
 
             BSTree bst = new BSTree(new Node(20));
-            bst.Insert(new Node(15));
-            bst.Insert(new Node(25));
-            bst.Insert(new Node(18));
-            bst.Insert(new Node(10));
+            bst.Insert(15);
+            bst.Insert(25);
+            bst.Insert(18);
+            bst.Insert(10);
             bst.Insert(new Node(19));
             bst.Insert(new Node(16));
             bst.Insert(new Node(17));
@@ -33,6 +30,9 @@ namespace BinarySearchTree
                   17
 
             */
+
+            bst.PrintTraversedTree(BSTree.TreeTraversalForm.BreathFirstSearch);
+            bst.Delete(15);
 
             bst.PrintTraversedTree(BSTree.TreeTraversalForm.BreathFirstSearch);
 
@@ -65,6 +65,59 @@ namespace BinarySearchTree
         public Node left { get; set; } = null;
         public Node right { get; set; } = null;
 
+        /// <summary>
+        /// Returns true if node is Leaf
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
+        public bool isLeaf()
+        {
+            if (this.left == null && this.right == null)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Returns true if this is left child of parent
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public bool isLeftChildOf(Node parent)
+        {
+            if (this == parent.left)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// Returns true if this is right child of parent
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public bool isRightChildOf(Node parent)
+        {
+            if (this == parent.right)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
+        /// return true if node has only one child
+        /// </summary>
+        /// <returns></returns>
+        public bool hasOnlyOneChild()
+        {
+            if (!this.isLeaf() && (this.left == null || this.right == null))
+                return true;
+            else
+                return false;
+        }
+
     }
 
     /// <summary>
@@ -78,9 +131,32 @@ namespace BinarySearchTree
         int _treeTraversalIndex = 0; //used to position node in array _treeTraversal
         int _currentTraverseForm = -1; //if -1 -> no valid traverse of tree 
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="root"></param>
         public BSTree(Node root) {
             _root = root;
             _nodeCounter++;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="rootValue"></param>
+        public BSTree(int rootValue)
+        {
+            _root = new Node(rootValue);
+            _nodeCounter++;
+        }
+
+        /// <summary>
+        /// Insert value into Tree
+        /// </summary>
+        /// <param name="value"></param>
+        public void Insert(int value)
+        {
+            Insert(new Node(value));
         }
 
         /// <summary>
@@ -172,6 +248,115 @@ namespace BinarySearchTree
             }
 
 
+        }
+
+        /// <summary>
+        /// get Next inorder - smalest from right subtree
+        /// </summary>
+        /// <param name="root"></param>
+        public Node GetNextInorder(Node node)
+        {
+
+            return Smalest(node.right);
+        }
+
+        /// <summary>
+        /// get smallest from from root - most left in subtree or tree
+        /// </summary>
+        /// <param name="root"></param>
+        private Node Smalest(Node root)
+        {
+
+            Node minNode = root.left;
+
+            while (root.left != null)
+            {
+                root = root.left;
+                minNode = root;
+            }
+
+            return minNode;
+        }
+
+        /// <summary>
+        /// Deletes the node
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="root"></param>
+
+        public void Delete(Node node, Node root = null)
+        {
+            if (node == null) {
+                Console.WriteLine("Please enter valid node!");
+                return;
+            }
+
+            if (root == null)
+            {
+                root = _root;
+                Console.WriteLine($"Deleting node: {node.value}");
+            }
+
+            //if node is child of root->we found parents of child 
+            if (node.isLeftChildOf(root) || node.isRightChildOf(root)) 
+            {
+                if (node.isLeaf()) // if is Leaf just remove it - remove reference at parrent
+                {
+                    if (node.isLeftChildOf(root))
+                        root.left = null;
+                    else
+                        root.right = null;
+
+                    _currentTraverseForm = -1;
+                    _nodeCounter--;
+                }
+                else if (node.hasOnlyOneChild()) // if only one child replace node with child
+                {
+                    if (node.left == null)
+                    {
+                        node.value = node.right.value;
+                        node.left = node.right.left;
+                        node.right = node.right.right;
+                    }
+                    else
+                    {
+                        node.value = node.left.value;
+                        node.left = node.left.left;
+                        node.right = node.left.right;
+                    }
+
+                    _currentTraverseForm = -1;
+                    _nodeCounter--;
+
+                }
+                else //else replace node with next in-order.
+                {
+                    Node tmpNode = GetNextInorder(node);
+                    node.value = tmpNode.value;
+                    Delete(tmpNode, node);
+
+                    _currentTraverseForm = -1;
+                }
+
+            }
+            else // else we need to dig deeper to the left or right
+            {
+                if (root.left != null && node.value < root.value)
+                    Delete(node, root.left);
+                else if(root.right!=null)
+                    Delete(node, root.right);
+            }
+            
+        }
+
+        /// <summary>
+        /// Deletes the node using value and binary search
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="root"></param>
+        public void Delete(int value, Node root = null)
+        {
+            Delete(BinarySearch(value));
         }
 
         /// <summary>
@@ -361,6 +546,8 @@ namespace BinarySearchTree
                 _treeTraversal[_treeTraversalIndex] = root.value;
                 _treeTraversalIndex++;
             }
+
+            
 
             if (root.left != null)
             {

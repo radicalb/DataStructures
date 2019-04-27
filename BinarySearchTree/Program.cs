@@ -34,6 +34,17 @@ namespace BinarySearchTree
             bst.PrintTraversedTree(BSTree.TreeTraversalForm.BreathFirstSearch);
             bst.Delete(15);
 
+            /*
+                 20
+                /  \
+               16  25
+              /  \
+             10  18
+                /  \
+               17  19
+
+           */
+
             bst.PrintTraversedTree(BSTree.TreeTraversalForm.BreathFirstSearch);
 
             Console.WriteLine("Searching for node...");
@@ -49,6 +60,11 @@ namespace BinarySearchTree
                 Console.WriteLine($"Node value: {stNiVDrevesu.value}");
             else
                 Console.WriteLine("Node not found!");
+
+            Console.WriteLine("Searching for node...");
+            Node someNode = bst.BinarySearchI(17);
+            if (someNode != null)
+                Console.WriteLine($"Node value: {someNode.value}");
         }
     }
 
@@ -207,7 +223,7 @@ namespace BinarySearchTree
         }
 
         /// <summary>
-        /// Binary Search throught the tree for value
+        /// Binary Search throught the tree for value - recursive
         /// </summary>
         /// <param name="value">searched value</param>
         /// <param name="root"></param>
@@ -249,6 +265,40 @@ namespace BinarySearchTree
 
 
         }
+
+        /// <summary>
+        /// Binary Search Iterative
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public Node BinarySearchI(int value)
+        {
+            Node node = _root;
+
+            for (int i = 0; i < _nodeCounter;i++) {
+                if (value == node.value)
+                {
+                    return node;
+                }
+                else if (value < node.value && node.left != null)
+                {
+                    node = node.left;
+                }
+                else if (node.right != null)
+                {
+                    node = node.right;
+                }
+                else
+                {
+                    Console.WriteLine("Value not found!");
+                    break;
+                }
+
+            }
+            return null;
+        }
+
+
 
         /// <summary>
         /// get Next inorder - smalest from right subtree

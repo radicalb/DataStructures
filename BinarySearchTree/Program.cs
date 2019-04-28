@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 /// <summary>
-/// My implementation of BST. It Has two classes. Node & BSTree.
+/// My implementation of BST. It Has two classes. INode & BSTree.
 /// </summary>
 namespace BinarySearchTree
 {
@@ -10,14 +10,14 @@ namespace BinarySearchTree
         static void Main(string[] args)
         {
 
-            BSTree bst = new BSTree(new Node(20));
+            BSTree bst = new BSTree(20);
             bst.Insert(15);
             bst.Insert(25);
             bst.Insert(18);
             bst.Insert(10);
-            bst.Insert(new Node(19));
-            bst.Insert(new Node(16));
-            bst.Insert(new Node(17));
+            bst.Insert(19);
+            bst.Insert(16);
+            bst.Insert(17);
             /*
                   20
                  /  \
@@ -47,102 +47,40 @@ namespace BinarySearchTree
            */
 
             bst.PrintTraversedTree(BSTree.TreeTraversalForm.BreathFirstSearch);
+            
 
-            Console.WriteLine("Searching for node...");
-            Node devetnajst = bst.BinarySearch(19);
+            
+            /*
+             * Console.WriteLine("Searching for node...");
+            BSTree.INode devetnajst = bst.BinarySearch(19);
             if (devetnajst != null)
-                Console.WriteLine($"Node value: {devetnajst.Value}");
+                Console.WriteLine($"INode value: {devetnajst.Value}");
             else
-                Console.WriteLine("Node not found!");
-
+                Console.WriteLine("INode not found!");
+            /*
             Console.WriteLine("Searching for node...");
-            Node stNiVDrevesu = bst.BinarySearch(23);
+            INode stNiVDrevesu = bst.BinarySearch(23);
             if(stNiVDrevesu!=null)
-                Console.WriteLine($"Node value: {stNiVDrevesu.Value}");
+                Console.WriteLine($"INode value: {stNiVDrevesu.Value}");
             else
-                Console.WriteLine("Node not found!");
+                Console.WriteLine("INode not found!");
 
             Console.WriteLine("Searching for node...");
-            Node someNode = bst.BinarySearchI(17);
-            if (someNode != null)
-                Console.WriteLine($"Node value: {someNode.Value}");
+            INode someINode = bst.BinarySearchI(17);
+            if (someINode != null)
+                Console.WriteLine($"INode value: {someINode.Value}");
+                */
         }
     }
 
-    /// <summary>
-    /// class Node represents nodes of the binary three.
-    /// </summary>
-    class Node
-    {
-        public Node(int value)
-        {
-            this.Value = value;
-        }
-        public int Value { get; set; }
-        public Node Left { get; set; } = null;
-        public Node Right { get; set; } = null;
-
-        /// <summary>
-        /// Returns true if node Is Leaf
-        /// </summary>
-        /// <param name="node"></param>
-        /// <returns></returns>
-        public bool IsLeaf()
-        {
-            if (this.Left == null && this.Right == null)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Returns true if this Is Left child of parent
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public bool IsLeftChildOf(Node parent)
-        {
-            if (this == parent.Left)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Returns true if this Is Right child of parent
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="parent"></param>
-        /// <returns></returns>
-        public bool IsRightChildOf(Node parent)
-        {
-            if (this == parent.Right)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// return true if node Has only one child
-        /// </summary>
-        /// <returns></returns>
-        public bool HasOnlyOneChild()
-        {
-            if (!this.IsLeaf() && (this.Left == null || this.Right == null))
-                return true;
-            else
-                return false;
-        }
-
-    }
+ 
 
     /// <summary>
     /// class BSTree represent Binary Search Tree. 
     /// </summary>
     class BSTree
     {
-        Node _root=null; // tree root
+        INode _root=null; // tree root
         int[] _treeTraversal; //three traversal -- dynamic programing
         int _nodeCounter=0; //nr of nodes - used to declare _treeTraversal size
         int _treeTraversalIndex = 0; //used to position node in array _treeTraversal
@@ -152,7 +90,7 @@ namespace BinarySearchTree
         /// Constructor
         /// </summary>
         /// <param name="root"></param>
-        public BSTree(Node root) {
+        public BSTree(INode root) {
             _root = root;
             _nodeCounter++;
         }
@@ -182,19 +120,11 @@ namespace BinarySearchTree
         }
 
         /// <summary>
-        /// 
+        /// Insert INode into tree
         /// </summary>
-        /// <param name="node"></param>
-        public void Insert(Node node) {
-            Insert(node,null);
-        }
-
-        /// <summary>
-        /// Insert Node into tree
-        /// </summary>
-        /// <param name="node">Node to be inserted.</param>
+        /// <param name="node">INode to be inserted.</param>
         /// <param name="root"></param>
-        private void Insert(Node node, Node root=null)
+        private void Insert(INode node, INode root=null)
         {
             if (root == null)
             {
@@ -239,9 +169,21 @@ namespace BinarySearchTree
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        public bool Contains(int value, bool searchRecursively=false)
+        {
+            if(searchRecursively == true)
+                return BinarySearch(value)!=null ? true : false;
+            else
+                return BinarySearchI(value) != null ? true : false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Node BinarySearch(int value)
+        private INode BinarySearch(int value)
         {
             return BinarySearch(value, null);
         }
@@ -251,8 +193,8 @@ namespace BinarySearchTree
         /// </summary>
         /// <param name="value">searched value</param>
         /// <param name="root"></param>
-        /// <returns>Node if found, otherwIse returns null</returns>
-        private Node BinarySearch(int value, Node root = null)
+        /// <returns>INode if found, otherwIse returns null</returns>
+        private INode BinarySearch(int value, INode root = null)
         {
             if (root == null)
             {
@@ -295,9 +237,9 @@ namespace BinarySearchTree
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Node BinarySearchI(int value)
+        public INode BinarySearchI(int value)
         {
-            Node node = _root;
+            INode node = _root;
 
             for (int i = 0; i < _nodeCounter;i++) {
                 if (value == node.Value)
@@ -328,7 +270,7 @@ namespace BinarySearchTree
         /// get Next inorder - FindLeftmostDescendent from Right subtree
         /// </summary>
         /// <param name="root"></param>
-        public Node GetNextInorder(Node node)
+        public INode GetNextInorder(INode node)
         {
 
             return FindLeftmostDescendent(node.Right);
@@ -338,7 +280,7 @@ namespace BinarySearchTree
         /// get smallest from from root - most Left in subtree or tree
         /// </summary>
         /// <param name="root"></param>
-        private Node FindLeftmostDescendent(Node root)
+        private INode FindLeftmostDescendent(INode root)
         {
 
             while (root.Left != null)
@@ -354,14 +296,9 @@ namespace BinarySearchTree
         /// </summary>
         /// <param name="value"></param>
         /// <param name="root"></param>
-        public void Delete(int value, Node root = null)
+        public void Delete(int value, INode root = null)
         {
             Delete(BinarySearch(value));
-        }
-
-        public void Delete(Node node)
-        {
-            Delete(node, null);
         }
 
         /// <summary>
@@ -370,11 +307,10 @@ namespace BinarySearchTree
         /// <param name="node"></param>
         /// <param name="root"></param>
 
-        public void Delete(Node node, Node root = null)
+        public void Delete(INode node, INode root = null)
         {
             if (node == null) {
                 throw new System.ArgumentException("Parameter cannot be null", "original");
-                return;
             }
 
             if (root == null)
@@ -400,15 +336,11 @@ namespace BinarySearchTree
                 {
                     if (node.Left == null)
                     {
-                        node.Value = node.Right.Value;
-                        node.Left = node.Right.Left;
-                        node.Right = node.Right.Right;
+                            node=node.Right.Clone();
                     }
                     else
                     {
-                        node.Value = node.Left.Value;
-                        node.Left = node.Left.Left;
-                        node.Right = node.Left.Right;
+                        node = node.Left.Clone();
                     }
 
                     InvalidateTraversal();
@@ -417,9 +349,9 @@ namespace BinarySearchTree
                 }
                 else //else replace node with next in-order.
                 {
-                    Node tmpNode = GetNextInorder(node);
-                    node.Value = tmpNode.Value;
-                    Delete(tmpNode, node);
+                    INode tmpINode = GetNextInorder(node);
+                    node.Value = tmpINode.Value;
+                    Delete(tmpINode, node);
 
                     InvalidateTraversal();
                 }
@@ -478,7 +410,6 @@ namespace BinarySearchTree
                         break;
                     default:
                         throw new System.InvalidOperationException("Unknown traversal form!");
-                        break;
                 }
             }
 
@@ -510,14 +441,12 @@ namespace BinarySearchTree
         /// Creates DFS - Pre-order traverse and stors it in _treeTraversal
         /// </summary>
         /// <param name="root"></param>
-        void Preorder(Node root = null)
+        void Preorder(INode root = null)
         {
             if (root == null)
             {
                 root = _root;
-                _treeTraversal = new int[_nodeCounter];
-                _treeTraversalIndex = 0;
-                _currentTraverseForm = (int)TreeTraversalForm.DFSpreorder;
+                InitiateTreeTraversal();
             }
 
             _treeTraversal[_treeTraversalIndex] = root.Value;
@@ -534,14 +463,12 @@ namespace BinarySearchTree
         /// Creates DFS - In-order traverse and stors it in _treeTraversal
         /// </summary>
         /// <param name="root"></param>
-        void Inorder(Node root = null)
+        void Inorder(INode root = null)
         {
             if (root == null)
             {
                 root = _root;
-                _treeTraversal = new int[_nodeCounter];
-                _treeTraversalIndex = 0;
-                _currentTraverseForm = (int)TreeTraversalForm.DFSinorder;
+                InitiateTreeTraversal();
             }
 
 
@@ -559,14 +486,12 @@ namespace BinarySearchTree
         /// Creates DFS - Post-order traverse and stors it in _treeTraversal
         /// </summary>
         /// <param name="root"></param>
-        void Postorder(Node root = null)
+        void Postorder(INode root = null)
         {
             if (root == null)
             {
                 root = _root;
-                _treeTraversal = new int[_nodeCounter];
-                _treeTraversalIndex = 0;
-                _currentTraverseForm = (int)TreeTraversalForm.DFSpostorder;
+                InitiateTreeTraversal();
             }
 
 
@@ -580,18 +505,17 @@ namespace BinarySearchTree
             _treeTraversalIndex++;
         }
 
+
         /// <summary>
         /// Creates DFS - Out-order traverse and stors it in _treeTraversal
         /// </summary>
         /// <param name="root"></param>
-        void Outorder(Node root = null)
+        void Outorder(INode root = null)
         {
             if (root == null)
             {
                 root = _root;
-                _treeTraversal = new int[_nodeCounter];
-                _treeTraversalIndex = 0;
-                _currentTraverseForm = (int)TreeTraversalForm.DFSoutorder;
+                InitiateTreeTraversal();
             }
 
 
@@ -610,14 +534,12 @@ namespace BinarySearchTree
         /// Creates BFS - BreathFirstSearch traverse and stors it in _treeTraversal
         /// </summary>
         /// <param name="root"></param>
-        void BreathFirstSearch(Node root = null)
+        void BreathFirstSearch(INode root = null)
         {
             if (root == null)
             {
                 root = _root;
-                _treeTraversal = new int[_nodeCounter];
-                _treeTraversalIndex = 0;
-                _currentTraverseForm = (int)TreeTraversalForm.BreathFirstSearch;
+                InitiateTreeTraversal();
 
                 _treeTraversal[_treeTraversalIndex] = root.Value;
                 _treeTraversalIndex++;
@@ -641,6 +563,111 @@ namespace BinarySearchTree
                 BreathFirstSearch(root.Left);
             if (root.Right != null)
                 BreathFirstSearch(root.Right);
+        }
+
+        private void InitiateTreeTraversal()
+        {
+            _treeTraversal = new int[_nodeCounter];
+            _treeTraversalIndex = 0;
+            _currentTraverseForm = (int)TreeTraversalForm.DFSpostorder;
+        }
+
+        public int GetNumberOfNodes()
+        {
+            return _nodeCounter;
+        }
+
+        public interface INode
+        {
+            int Value { get; set; }
+            INode Left { get; set; }
+            INode Right { get; set; }
+
+            bool IsLeaf();
+            bool IsLeftChildOf(INode parent);
+
+            bool IsRightChildOf(INode parent);
+
+            bool HasOnlyOneChild();
+
+            INode Clone();
+        }
+
+        /// <summary>
+        /// class INode represents nodes of the binary three.
+        /// </summary>
+        private class Node:INode
+        {
+            public int Value { get; set; }
+            public INode Left { get; set; } = null;
+            public INode Right { get; set; } = null;
+
+            public Node(int value)
+            {
+                Value = value;
+            }
+
+            /// <summary>
+            /// Returns true if node Is Leaf
+            /// </summary>
+            /// <param name="node"></param>
+            /// <returns></returns>
+            public bool IsLeaf()
+            {
+                if (this.Left == null && this.Right == null)
+                    return true;
+                else
+                    return false;
+            }
+
+            /// <summary>
+            /// Returns true if this Is Left child of parent
+            /// </summary>
+            /// <param name="node"></param>
+            /// <param name="parent"></param>
+            /// <returns></returns>
+            public bool IsLeftChildOf(INode parent)
+            {
+                if (this == parent.Left)
+                    return true;
+                else
+                    return false;
+            }
+
+            /// <summary>
+            /// Returns true if this Is Right child of parent
+            /// </summary>
+            /// <param name="node"></param>
+            /// <param name="parent"></param>
+            /// <returns></returns>
+            public bool IsRightChildOf(INode parent)
+            {
+                if (this == parent.Right)
+                    return true;
+                else
+                    return false;
+            }
+
+            /// <summary>
+            /// return true if node Has only one child
+            /// </summary>
+            /// <returns></returns>
+            public bool HasOnlyOneChild()
+            {
+                if (!this.IsLeaf() && (this.Left == null || this.Right == null))
+                    return true;
+                else
+                    return false;
+            }
+
+            public INode Clone()
+            {
+                INode newINode = new Node(this.Value);
+                newINode.Left = this.Left;
+                newINode.Right = this.Right;
+                return newINode;
+            }
+
         }
     }
 }

@@ -32,7 +32,7 @@ namespace BinarySearchTree
 
             */
 
-            Console.WriteLine(bst.PrintTraversedTree(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch));
+            Console.WriteLine(bst.PrintTraversedKeys(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch));
             //bst.Delete(15);
             bst.Delete(18);
             Console.WriteLine("Deleting completed. 18");
@@ -48,12 +48,20 @@ namespace BinarySearchTree
            */
 
             Console.WriteLine("Tree contains 18: "+bst.Contains(18));
-            Console.WriteLine(bst.PrintTraversedTree(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch));
+            Console.WriteLine(bst.PrintTraversedKeys(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch));
+
+            string[] aValues = bst.TraverseValues(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch);
+
+            foreach (string val in aValues)
+            {
+                Console.Write($"{val} ");
+            }
+
+            Console.WriteLine();
 
 
-
-            //Console.WriteLine(bst.GetValue(20));
-            //Console.WriteLine(bst.GetValue(25));
+            //Console.WriteLine(bst.GetValue(18));
+            Console.WriteLine(bst.GetValue(25));
 
         }
     }
@@ -66,7 +74,8 @@ namespace BinarySearchTree
     class BSTreeDict<T>
     {
         INode _root=null; // tree root
-        int[] _treeTraversal; //three traversal -- dynamic programing
+        int[] _treeTraversal; //tree traversal -- dynamic programing
+        T[] _treeTraversalValues; //three traversal -- dynamic programing
         int _nodeCounter=0; //nr of nodes - used to declare _treeTraversal size
         int _treeTraversalIndex = 0; //used to position node in array _treeTraversal
         int _currentTraverseForm = -1; //if -1 -> no valid traverse of tree 
@@ -370,7 +379,7 @@ namespace BinarySearchTree
         /// </summary>
         /// <param name="traversalForm"></param>
         /// <returns></returns>
-        public int[] TraverseTree(TreeTraversalForm traversalForm)
+        public int[] TraverseKeys(TreeTraversalForm traversalForm)
         {
 
             //if tree Is already traversed -> dont do it again
@@ -401,16 +410,47 @@ namespace BinarySearchTree
             return (int[])_treeTraversal.Clone();
         }
 
+        public T[] TraverseValues(TreeTraversalForm traversalForm)
+        {
+
+            //if tree Is already traversed -> dont do it again
+            if ((int)traversalForm != _currentTraverseForm)
+            {
+                switch (traversalForm)
+                {
+                    case TreeTraversalForm.DFSinorder:
+                        this.Inorder();
+                        break;
+                    case TreeTraversalForm.DFSoutorder:
+                        this.Outorder();
+                        break;
+                    case TreeTraversalForm.DFSpostorder:
+                        this.Postorder();
+                        break;
+                    case TreeTraversalForm.DFSpreorder:
+                        this.Preorder();
+                        break;
+                    case TreeTraversalForm.BreathFirstSearch:
+                        this.BreathFirstSearch();
+                        break;
+                    default:
+                        throw new System.InvalidOperationException("Unknown traversal form!");
+                }
+            }
+
+            return (T[])_treeTraversalValues.Clone();
+        }
+
         /// <summary>
         /// Prints traversed tree to Console
         /// </summary>
         /// <param name="traversalForm"></param>
-        public string PrintTraversedTree(TreeTraversalForm traversalForm)
+        public string PrintTraversedKeys(TreeTraversalForm traversalForm)
         {
 
             if ((int)traversalForm != _currentTraverseForm)
             {
-                this.TraverseTree(traversalForm);
+                this.TraverseKeys(traversalForm);
             }
 
             string tmpReturn= traversalForm.ToString() + ": ";
@@ -433,7 +473,7 @@ namespace BinarySearchTree
                 InitiateTreeTraversal(TreeTraversalForm.DFSpreorder);
             }
 
-            AppendTreeTraversalArr(root.Key);
+            AppendTreeTraversalArr(root);
 
             if (root.Left != null)
                 Preorder(root.Left);
@@ -459,7 +499,7 @@ namespace BinarySearchTree
             if (root.Left != null)
                 Inorder(root.Left);
 
-            AppendTreeTraversalArr(root.Key);
+            AppendTreeTraversalArr(root);
 
             if (root.Right != null)
                 Inorder(root.Right);
@@ -484,7 +524,7 @@ namespace BinarySearchTree
             if (root.Right != null)
                 Postorder(root.Right);
 
-            AppendTreeTraversalArr(root.Key);
+            AppendTreeTraversalArr(root);
         }
 
 
@@ -504,7 +544,7 @@ namespace BinarySearchTree
             if (root.Right != null)
                 Outorder(root.Right);
 
-            AppendTreeTraversalArr(root.Key);
+            AppendTreeTraversalArr(root);
 
             if (root.Left != null)
                 Outorder(root.Left);
@@ -522,19 +562,19 @@ namespace BinarySearchTree
                 root = _root;
                 InitiateTreeTraversal(TreeTraversalForm.BreathFirstSearch);
 
-                AppendTreeTraversalArr(root.Key);
+                AppendTreeTraversalArr(root);
             }
 
             
 
             if (root.Left != null)
             {
-                AppendTreeTraversalArr(root.Left.Key);
+                AppendTreeTraversalArr(root.Left);
             }
                 
             if (root.Right != null)
             {
-                AppendTreeTraversalArr(root.Right.Key);
+                AppendTreeTraversalArr(root.Right);
             }
 
             if (root.Left != null)
@@ -546,14 +586,16 @@ namespace BinarySearchTree
         private void InitiateTreeTraversal(TreeTraversalForm treeTraversalForm)
         {
             _treeTraversal = new int[_nodeCounter];
+            _treeTraversalValues = new T[_nodeCounter];
             _treeTraversalIndex = 0;
             _currentTraverseForm = (int)treeTraversalForm;
         }
 
 
-        private void AppendTreeTraversalArr(int key)
+        private void AppendTreeTraversalArr(INode node)
         {
-            _treeTraversal[_treeTraversalIndex] = key;
+            _treeTraversal[_treeTraversalIndex] = node.Key;
+            _treeTraversalValues[_treeTraversalIndex] = node.Value;
             _treeTraversalIndex++;
         }
 

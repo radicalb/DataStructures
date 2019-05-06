@@ -4,7 +4,7 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
 {
 
     /// <summary>
-    /// class BSTree represent Binary Search Tree. 
+    /// class BSTreeDict represent Binary Search Tree Dictionary. 
     /// </summary>
     public class BSTreeDict<T>
     {
@@ -15,36 +15,30 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
         int _treeTraversalIndex = 0; //used to position node in array _treeTraversal
         int _currentTraverseForm = -1; //if -1 -> no valid traverse of tree 
 
-
         /// <summary>
-        /// Constructor
+        /// COnstructor for BSTreeDict
         /// </summary>
-        /// <param name="rootKey"></param>
-        public BSTreeDict(int rootKey)
-        {
-            _root = new Node(rootKey);
-            _nodeCounter++;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="root"></param>
+        /// <param name="rootKey">int Key</param>
+        /// <param name="value">Generic Value</param>
         public BSTreeDict(int rootKey, T value)
         {
             _root = new Node(rootKey, value);
             _nodeCounter++;
         }
 
+        /// <summary>
+        /// Method that invalidates traversal
+        /// </summary>
         private void InvalidateTraversal()
         {
             _currentTraverseForm = -1;
         }
 
         /// <summary>
-        /// Insert key into Tree
+        /// Insert key & value into Tree
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">int key</param>
+        /// <param name="value">Generic Value</param>
         public void Insert(int key, T value)
         {
             Insert(new Node(key, value));
@@ -193,7 +187,6 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
         }
 
 
-
         /// <summary>
         /// get Next inorder - FindLeftmostDescendent from Right subtree
         /// </summary>
@@ -223,7 +216,7 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
         /// Deletes the node using key and binary search
         /// </summary>
         /// <param name="key"></param>
-        /// <param name="root"></param>
+        /// <param name="searchRecursively"></param>
         public void Delete(int key, bool searchRecursively = false)
         {
             if (searchRecursively)
@@ -328,13 +321,11 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
         };
 
         /// <summary>
-        /// Maps the tree traversal form with appropriate method
+        /// Traverses Tree to traversalForm
         /// </summary>
         /// <param name="traversalForm"></param>
-        /// <returns></returns>
-        public int[] TraverseKeys(TreeTraversalForm traversalForm)
+        private void TraverseTree(TreeTraversalForm traversalForm)
         {
-
             //if tree Is already traversed -> dont do it again
             if ((int)traversalForm != _currentTraverseForm)
             {
@@ -359,38 +350,28 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
                         throw new System.InvalidOperationException("Unknown traversal form!");
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns traversed tree keys in "traversalForm" to array of int
+        /// </summary>
+        /// <param name="traversalForm"></param>
+        /// <returns></returns>
+        public int[] GetTraversedKeys(TreeTraversalForm traversalForm)
+        {  
+            TraverseTree(traversalForm);
 
             return (int[])_treeTraversal.Clone();
         }
 
-        public T[] TraverseValues(TreeTraversalForm traversalForm)
+        /// <summary>
+        /// Returns traversed tree values in "traversalForm" to generic array
+        /// </summary>
+        /// <param name="traversalForm"></param>
+        /// <returns></returns>
+        public T[] GetTraversedValues(TreeTraversalForm traversalForm)
         {
-
-            //if tree Is already traversed -> dont do it again
-            if ((int)traversalForm != _currentTraverseForm)
-            {
-                switch (traversalForm)
-                {
-                    case TreeTraversalForm.DFSinorder:
-                        this.Inorder();
-                        break;
-                    case TreeTraversalForm.DFSoutorder:
-                        this.Outorder();
-                        break;
-                    case TreeTraversalForm.DFSpostorder:
-                        this.Postorder();
-                        break;
-                    case TreeTraversalForm.DFSpreorder:
-                        this.Preorder();
-                        break;
-                    case TreeTraversalForm.BreathFirstSearch:
-                        this.BreathFirstSearch();
-                        break;
-                    default:
-                        throw new System.InvalidOperationException("Unknown traversal form!");
-                }
-            }
-
+            TraverseTree(traversalForm);
             return (T[])_treeTraversalValues.Clone();
         }
 
@@ -401,15 +382,12 @@ namespace RadicalB.DataStructures.BSTreeDictGeneric
         public string PrintTraversedKeys(TreeTraversalForm traversalForm)
         {
 
-            if ((int)traversalForm != _currentTraverseForm)
-            {
-                this.TraverseKeys(traversalForm);
-            }
+            TraverseTree(traversalForm);
 
             string tmpReturn = traversalForm.ToString() + ": ";
-            foreach (int val in _treeTraversal)
+            foreach (int key in _treeTraversal)
             {
-                tmpReturn += $"{val} ";
+                tmpReturn += $"{key} ";
             }
             return tmpReturn;
         }

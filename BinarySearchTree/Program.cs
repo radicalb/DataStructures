@@ -61,7 +61,7 @@ namespace RadicalB.DataStructures
             Console.WriteLine("Tree contains 18: "+bst.Contains(18));
             Console.WriteLine(bst.PrintTraversedKeys(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch));
 
-            string[] aValues = bst.TraverseValues(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch);
+            string[] aValues = bst.GetTraversedValues(BSTreeDict<string>.TreeTraversalForm.BreathFirstSearch);
 
             foreach (string val in aValues)
             {

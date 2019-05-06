@@ -1,5 +1,5 @@
 ﻿using System;
-using RadicalB.DataStructures.BSTreeDictGeneric;
+using RadicalB.DataStructures.Trees;
 
 using System.Collections.Generic;
 /// <summary>

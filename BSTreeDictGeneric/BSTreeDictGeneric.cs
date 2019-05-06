@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RadicalB.DataStructures.BSTreeDictGeneric
+namespace RadicalB.DataStructures.Trees
 {
 
     /// <summary>

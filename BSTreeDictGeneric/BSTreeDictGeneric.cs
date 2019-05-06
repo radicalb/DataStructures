@@ -2,6 +2,7 @@
 
 namespace RadicalB.DataStructures.BSTreeDictGeneric
 {
+
     /// <summary>
     /// class BSTree represent Binary Search Tree. 
     /// </summary>
